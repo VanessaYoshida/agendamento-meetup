@@ -1,5 +1,6 @@
 package com.bootcamp.microservicemeetup.controller.resource;
 
+import com.bootcamp.microservicemeetup.controller.dto.EventMeetupDTO;
 import com.bootcamp.microservicemeetup.controller.dto.MeetupDTO;
 import com.bootcamp.microservicemeetup.controller.dto.MeetupUpdateDTO;
 import com.bootcamp.microservicemeetup.controller.dto.RegistrationDTO;
@@ -36,12 +37,12 @@ public class MeetupController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    private Integer create(@RequestBody MeetupDTO meetupDTO) {
+    private Integer createEvent(@RequestBody EventMeetupDTO eventMeetupDTO) {
 
         Meetup entity = Meetup.builder()
-                .event(meetupDTO.getEvent())
-                .meetupDate(meetupDTO.getDate().toString())
-                .ownerId(meetupDTO.getOwnerId())
+                .event(eventMeetupDTO.getEvent())
+                .meetupDate(eventMeetupDTO.getDate().toString())
+                .ownerId(eventMeetupDTO.getOwnerId())
                 .build();
 
         entity = meetupService.save(entity);

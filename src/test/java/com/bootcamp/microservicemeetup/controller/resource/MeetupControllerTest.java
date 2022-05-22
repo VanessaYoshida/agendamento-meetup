@@ -1,6 +1,6 @@
 package com.bootcamp.microservicemeetup.controller.resource;
 
-import com.bootcamp.microservicemeetup.controller.dto.MeetupDTO;
+import com.bootcamp.microservicemeetup.controller.dto.EventMeetupDTO;
 import com.bootcamp.microservicemeetup.controller.dto.MeetupUpdateDTO;
 import com.bootcamp.microservicemeetup.exception.BusinessException;
 import com.bootcamp.microservicemeetup.model.entity.Meetup;
@@ -53,20 +53,18 @@ public class MeetupControllerTest {
 
     @Test
     @DisplayName("Should register on a meetup")
-    public void createMeetupTest() throws Exception {
+    public void createEventMeetupTest() throws Exception {
 
-        MeetupDTO dto = MeetupDTO.builder()
+        EventMeetupDTO dto = EventMeetupDTO.builder()
                 .event("Womakerscode Dados")
                 .date("20/06/2022")
                 .ownerId(1)
-                .registrations(null)
                 .build();
         String json = new ObjectMapper().writeValueAsString(dto);
 
         Meetup meetup = Meetup.builder()
                 .id(11)
                 .event("Womakerscode Dados")
-                .registrations(Collections.emptyList())
                 .meetupDate("20/06/2022")
                 .ownerId(1)
                 .build();
@@ -87,11 +85,10 @@ public class MeetupControllerTest {
     @DisplayName("Should return error when try to register a registration already register on a meetup")
     public void meetupRegistrationErrorOnCreateMeetupTest() throws Exception {
 
-        MeetupDTO dto = MeetupDTO.builder()
+        EventMeetupDTO dto = EventMeetupDTO.builder()
                 .event("Womakerscode Dados")
                 .date("20/06/2022")
                 .ownerId(1)
-                .registrations(null)
                 .build();
         String json = new ObjectMapper().writeValueAsString(dto);
 

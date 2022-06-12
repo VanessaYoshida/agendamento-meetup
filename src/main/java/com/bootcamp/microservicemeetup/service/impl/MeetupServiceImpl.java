@@ -3,7 +3,9 @@ package com.bootcamp.microservicemeetup.service.impl;
 import com.bootcamp.microservicemeetup.model.entity.Meetup;
 import com.bootcamp.microservicemeetup.repository.MeetupRepository;
 import com.bootcamp.microservicemeetup.service.MeetupService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +13,7 @@ import java.util.Optional;
 
 @Service
 public class MeetupServiceImpl implements MeetupService {
-
+    @Autowired
     private MeetupRepository repository;
 
     public MeetupServiceImpl(MeetupRepository repository) {
@@ -27,6 +29,9 @@ public class MeetupServiceImpl implements MeetupService {
     public Optional<Meetup> getById(Integer id) {
         return repository.findById(id);
     }
+
+    @Override
+    public Page<Meetup> findAll(PageRequest pageRequest) { return (Page<Meetup>) repository.findAll(pageRequest); }
 
     @Override
     public void delete(Meetup meetup) {

@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -248,11 +249,10 @@ public class MeetupControllerTest {
                 .registrations(List.of(Registration.builder().id(1)
                         .personId("1").dateOfRegistration(LocalDate.now()).name("VanessaYoshida").build())).build();
 
-        BDDMockito.given(meetupService.getRegistrationsByMeetup(Mockito.any(Meetup.class),
-                        Mockito.any(Pageable.class)))
+        BDDMockito.given(meetupService.findAll(Mockito.any(PageRequest.class)))
                 .willReturn(new PageImpl<Meetup>(Arrays.asList(meetup), PageRequest.of(0, 10), 1));
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(MEETUP_API.concat("?event=WoMakersCode&page=0&size=10"))
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(MEETUP_API.concat("?page=0&size=10"))
                 .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)
@@ -267,11 +267,10 @@ public class MeetupControllerTest {
     @DisplayName("Should return empty list")
     void testFindAndShouldReturnEmptyList() throws Exception {
 
-        BDDMockito.given(meetupService.getRegistrationsByMeetup(Mockito.any(Meetup.class),
-                        Mockito.any(Pageable.class)))
+        BDDMockito.given(meetupService.findAll(Mockito.any(PageRequest.class)))
                 .willReturn(new PageImpl<Meetup>(Collections.emptyList(), PageRequest.of(0, 10), 0));
 
-        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(MEETUP_API.concat("?event=WoMakersCode&page=0&size=10"))
+        MockHttpServletRequestBuilder request = MockMvcRequestBuilders.get(MEETUP_API.concat("?page=0&size=10"))
                 .accept(MediaType.APPLICATION_JSON);
 
         mockMvc.perform(request)

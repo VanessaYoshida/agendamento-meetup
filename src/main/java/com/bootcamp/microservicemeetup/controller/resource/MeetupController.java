@@ -3,14 +3,14 @@ package com.bootcamp.microservicemeetup.controller.resource;
 import com.bootcamp.microservicemeetup.controller.dto.EventMeetupDTO;
 import com.bootcamp.microservicemeetup.controller.dto.MeetupDTO;
 import com.bootcamp.microservicemeetup.controller.dto.MeetupUpdateDTO;
-import com.bootcamp.microservicemeetup.controller.dto.RegistrationDTO;
 import com.bootcamp.microservicemeetup.model.entity.Meetup;
-import com.bootcamp.microservicemeetup.model.entity.Registration;
 import com.bootcamp.microservicemeetup.service.MeetupService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +32,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/meetups")
 @RequiredArgsConstructor
 public class MeetupController {
+    @Autowired
     private final MeetupService meetupService;
     private final ModelMapper modelMapper;
 
@@ -60,23 +61,14 @@ public class MeetupController {
     }
 
     @GetMapping
-    public Page<MeetupDTO> find(MeetupDTO dto, Pageable pageRequest) {
-        Meetup meetup = modelMapper.map(dto, Meetup.class);
-        Page<Meetup> result = meetupService.getRegistrationsByMeetup(meetup, pageRequest);
+    public Page<MeetupDTO> findAll(Pageable pageRequest) {
+        Page<Meetup> result = meetupService.findAll((PageRequest) pageRequest);
+
         List<MeetupDTO> meetups = result
                 .getContent()
                 .stream()
                 .map(entity -> {
-
-                    List<Registration> registrations = entity.getRegistrations();
-
-                    List<RegistrationDTO> registrationDTOS = registrations.stream()
-                            .map(registration -> modelMapper.map(registration, RegistrationDTO.class))
-                            .collect(Collectors.toList());
-
                     MeetupDTO meetupDTO = modelMapper.map(entity, MeetupDTO.class);
-                    meetupDTO.setRegistrations(registrationDTOS);
-
                     return meetupDTO;
 
                 }).collect(Collectors.toList());
